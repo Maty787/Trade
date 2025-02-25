@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Trading Web</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+    }
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+    .button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #218838;
+    }
+    .trade-history {
+      margin-top: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Basic Trading Web</h1>
+  </div>
+  
+  <div class="container">
+    <div class="form-group">
+      <label for="action">Action</label>
+      <select id="action">
+        <option value="buy">Buy</option>
+        <option value="sell">Sell</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="stock">Stock Symbol</label>
+      <input type="text" id="stock" placeholder="Enter Stock Symbol (e.g., AAPL)" />
+    </div>
+    
+    <div class="form-group">
+      <label for="amount">Amount</label>
+      <input type="number" id="amount" placeholder="Enter Amount to Trade" />
+    </div>
+    
+    <button class="button" onclick="executeTrade()">Execute Trade</button>
+    
+    <div class="trade-history">
+      <h2>Trade History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>Stock Symbol</th>
+            <th>Amount</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody id="tradeHistory">
+          <!-- Trade history will be appended here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let tradeHistory = [];
+
+    function executeTrade() {
+      const action = document.getElementById('action').value;
+      const stock = document.getElementById('stock').value;
+      const amount = document.getElementById('amount').value;
+      const currentTime = new Date().toLocaleString();
+      
+      if (!stock || !amount || amount <= 0) {
+        alert('Please provide valid stock symbol and amount.');
+        return;
+      }
+
+      // Add trade to history
+      const trade = { action, stock, amount, time: currentTime };
+      tradeHistory.push(trade);
+
+      // Render trade history
+      renderTradeHistory();
+      
+      // Reset inputs
+      document.getElementById('stock').value = '';
+      document.getElementById('amount').value = '';
+    }
+
+    function renderTradeHistory() {
+      const tradeHistoryTable = document.getElementById('tradeHistory');
+      tradeHistoryTable.innerHTML = ''; // Clear existing rows
+      
+      tradeHistory.forEach((trade) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${trade.action}</td>
+          <td>${trade.stock}</td>
+          <td>${trade.amount}</td>
+          <td>${trade.time}</td>
+        `;
+        tradeHistoryTable.appendChild(row);
+      });
+    }
+  </script>
+</body>
+</html>
